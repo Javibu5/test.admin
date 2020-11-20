@@ -1,25 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import {Admin, EditGuesser, Resource} from 'react-admin';
+import dataProvider from './dataProvider'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import {DepartmentList} from './departmentList'
+import {DepartmentShow} from './departmentShow'
+
+
+const App = () => (
+        <Admin  dataProvider = { dataProvider } >
+          <Resource name="departments"  list={DepartmentList} edit={EditGuesser} show={DepartmentShow}/>
+        </Admin>
+);
 
 export default App;
