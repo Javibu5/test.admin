@@ -1,11 +1,9 @@
-import {SimpleShowLayout, TextField, RichTextField, NumberField, Show } from 'react-admin'
+import {SimpleShowLayout, RichTextField, Show } from 'react-admin'
 
 export const DepartmentShow = (props) => (
     <Show {...props}>
         <SimpleShowLayout>
-            <TextField source="title" />
-            <RichTextField source="body" />
-            <NumberField source="nb_views" />
+            <RichTextField source="name" />
         </SimpleShowLayout>
     </Show>
 );

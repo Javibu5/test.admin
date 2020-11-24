@@ -1,14 +1,15 @@
 import * as React from "react";
-import {Admin, EditGuesser, Resource} from 'react-admin';
-import dataProvider from './dataProvider'
+import {Admin, Resource} from 'react-admin';
+import dataProvider from './dataProvider';
 
-import {DepartmentList} from './departmentList'
-import {DepartmentShow} from './departmentShow'
+import authProvider from './authProvider';
+import {DepartmentList} from './departmentList';
+import {DepartmentCreate } from './departmentCreate';
 
 
 const App = () => (
-        <Admin  dataProvider = { dataProvider } >
-          <Resource name="departments"  list={DepartmentList} edit={EditGuesser} show={DepartmentShow}/>
+        <Admin authProvider= {authProvider} dataProvider = { dataProvider }  >
+          <Resource name="departments"  list={DepartmentList} create= { DepartmentCreate }/>
         </Admin>
 );
 

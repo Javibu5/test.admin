@@ -1,9 +1,18 @@
 import { fetchUtils } from 'react-admin';
 import { stringify } from 'query-string';
 
-const apiUrl = 'http://localhost:3000';
-const httpClient = fetchUtils.fetchJson;
 
+
+const apiUrl = 'http://localhost:3000';
+const httpClient =  (url, options = {}) => {
+    if (!options.headers) {
+        options.headers = new Headers({ Accept: 'application/json' });
+    }
+    const { access_token } = JSON.parse(localStorage.getItem('auth'));
+    options.headers.set('Authorization', `Bearer ${access_token}`);
+    return fetchUtils.fetchJson(url, options);
+};
+// eslint-disable-next-line
 export default {
     getList: (resource, params) => {
         const { page, perPage } = params.pagination;
@@ -74,21 +83,26 @@ export default {
             method: 'POST',
             body: JSON.stringify(params.data),
         }).then(({ json }) => ({
-            data: { data: { ...params.data, id: json._id } },
+            data: { ...params.data, id: json._id },
         })),
 
-    delete: (resource, params) =>
-        httpClient(`${apiUrl}/${resource}/${params.id}`, {
+    delete: (resource, params) => {
+        console.info('delete')
+
+        return httpClient(`${apiUrl}/${resource}/${params.id}`, {
             method: 'DELETE',
-        }).then(({ json }) => ({ ...json, id: json._id })),
+        }).then(({ json }) => ({ ...json, id: json._id }))
+    },
 
     deleteMany: (resource, params) => {
-        const query = {
-            filter: JSON.stringify({ id: params.ids}),
-        };
-        return httpClient(`${apiUrl}/${resource}?${stringify(query)}`, {
-            method: 'DELETE',
-            body: JSON.stringify(params.data),
-        }).then(({ json }) => ({ data: json }));
+        console.info('deleteMany')
+        
+        params.ids.forEach(async (id) => {
+            await httpClient(`${apiUrl}/${resource}/${id}`, {
+                method: 'DELETE',
+            });
+        });
+        
+        return { data: [] }
     },
 };
